@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../blaze-slider/dist/blaze.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <title>Blaze Slider Playground</title>
+  </head>
+
+  <body>
+    <div class="app">
+      <button>Teste</button>
+      <div class="blaze-slider my-slider">
+        <div class="blaze-container">
+          <div class="blaze-track-container">
+            <ul class="blaze-track">
+              <li tabindex="0">1 Jornada única para o RH</li>
+              <li tabindex="0">2 Jornada única para o RH</li>
+              <li tabindex="0">3 Jornada única para o RH</li>
+              <li tabindex="0">4 Jornada única para o RH</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="blaze-prev">prev</button>
+          <div class="blaze-pagination"></div>
+          <button class="blaze-next">next</button>
+        </div>
+      </div>
+
+      <button>Teste 2</button>
+    </div>
+
+    <script src="../blaze-slider/dist/blaze-slider.min.js"></script>
+
+    <!-- playground-->
+    <script>
+      const sliderEl = document.querySelector('.blaze-slider')
+
+      const blazeSlider = new BlazeSlider(sliderEl, {
+        all: {
+          enableAutoplay: true,
+          slidesToScroll: 3,
+          slidesToShow: 3,
+          transitionDuration: 300,
+          loop: true,
+        },
+        '(max-width: 900px)': {
+          slidesToShow: 2,
+          slidesToShow: 2,
+          slidesGap: '400px',
+        },
+        '(max-width: 500px)': {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      })
+
+      document.addEventListener('keyup', (e) => {
+        // re-enable autoplay on blur
+        if (e.key == 'Tab') {
+          console.log(blazeSlider)
+          console.log('contain', sliderEl, document.activeElement)
+          if (sliderEl?.contains(document.activeElement)) {
+            console.log('stop')
+            blazeSlider.stopAutoplay()
+          }
+          if (!sliderEl?.contains(document.activeElement)) {
+            console.log('play')
+            blazeSlider.play()
+          }
+        }
+      })
+      // Annouce page (aria-live)
+
+      // FOcus on item?
+
+      // listen for slide event
+      blazeSlider.onSlide(
+        (pageIndex, firstVisibleSlideIndex, lastVisibleSlideIndex) => {
+          // console.log(
+          //   blazeSlider.track.classList,
+          //   pageIndex,
+          //   firstVisibleSlideIndex,
+          //   lastVisibleSlideIndex
+          // );
+          // let items = blazeSlider.track.querySelectorAll("li");
+          // for (let i = firstVisibleSlideIndex; i <= lastVisibleSlideIndex; i++) {
+          //   items[i].classList.add("active");
+          // }
+        }
+      )
+    </script>
+  </body>
+</html>

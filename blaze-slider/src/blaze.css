@@ -11,7 +11,7 @@
 }
 
 .blaze-track-container {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .blaze-track {
@@ -28,6 +28,21 @@
 .blaze-track,
 .blaze-track > * {
   box-sizing: border-box;
+}
+
+.blaze-track li {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.blaze-track li.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.blaze-track li:focus-visible {
+  outline: 2px solid white;
 }
 
 .blaze-track > * {

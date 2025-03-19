@@ -20,4 +20,25 @@ export function handleNavigation(slider: BlazeSlider) {
       slider.next()
     }
   }
+
+  document.addEventListener('keydown', (e) => {
+    // Use arrows to navigate
+    if (e.key === 'ArrowRight') {
+      slider.next(1)
+    }
+    if (e.key === 'ArrowLeft') {
+      slider.prev(1)
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      slider.stopAutoplay()
+    }
+  })
+
+  // Pause autoplay on mouse hover
+  slider.track.addEventListener('mouseenter', () => {
+    slider.stopAutoplay()
+  })
+  slider.track.addEventListener('mouseout', () => {
+    slider.play()
+  })
 }

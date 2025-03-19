@@ -7,7 +7,12 @@ import { dragSupport, handlePointerDown, isTouch } from './utils/drag'
 import { updateTransform } from './utils/methods'
 import { handleNavigation } from './utils/navigation'
 import { handlePagination } from './utils/pagination'
-import { scrollNext, scrollPrev } from './utils/scroll'
+import {
+  clearActive,
+  scrollNext,
+  scrollPrev,
+  setActiveItems,
+} from './utils/scroll'
 
 function isTransitioning(
   slider: BlazeSlider,
@@ -31,6 +36,7 @@ export class BlazeSlider extends Automata {
   passedConfig?: BlazeConfig
   autoplayTimer?: any
   onSlideCbs?: Set<SlideChangeCallback>
+  isPlaying: Boolean
 
   constructor(blazeSliderEl: HTMLElement, blazeConfig?: BlazeConfig) {
     const track = blazeSliderEl.querySelector('.blaze-track') as Track
@@ -49,6 +55,7 @@ export class BlazeSlider extends Automata {
     this.offset = 0
     this.dragged = 0
     this.isDragging = false
+    this.isPlaying = false
 
     // @ts-ignore - for debugging
     this.el.blazeSlider = this
@@ -84,6 +91,9 @@ export class BlazeSlider extends Automata {
         }, 200)
       }
     })
+
+    // Set active items
+    setActiveItems(slider)
   }
 
   next(count?: number) {
@@ -101,6 +111,7 @@ export class BlazeSlider extends Automata {
 
   prev(count?: number) {
     if (this.isTransitioning) return
+    clearActive(this)
     const transition = super.prev(count)
     if (!transition) {
       isTransitioning(this)
@@ -110,10 +121,20 @@ export class BlazeSlider extends Automata {
     handleStateChange(this, prevStateIndex)
     isTransitioning(this)
     scrollPrev(this, slideCount)
+    setTimeout(() => {
+      setActiveItems(this)
+    }, 10)
   }
 
   stopAutoplay() {
     clearInterval(this.autoplayTimer)
+    this.isPlaying = false
+  }
+
+  play() {
+    if (this.isPlaying) return
+    handleAutoplay(this)
+    this.isPlaying = true
   }
 
   destroy() {
